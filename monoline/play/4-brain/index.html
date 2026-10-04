@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="ad.size" content="width=320,height=480">
+<title>Monoline — Playable</title>
+<style>
+  :root{--bg1:#0a0e1a;--bg2:#121829;--c1:#3ad1c6;--c2:#5b8cff;--acc:#3ad1c6}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+  html,body{width:100%;height:100%;overflow:hidden;touch-action:none;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:radial-gradient(1000px 700px at 30% -10%,var(--bg2) 0%,var(--bg1) 60%),var(--bg1);color:#e9edf6}
+  #stage{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center}
+  .top{padding:calc(14px + env(safe-area-inset-top)) 14px 4px;text-align:center;z-index:3;width:100%}
+  .brand{display:flex;align-items:center;justify-content:center;gap:7px;font-weight:800;letter-spacing:.04em;font-size:15px}
+  .meta{margin-top:6px;font-size:12px;color:#93a0bd;letter-spacing:.03em}
+  .meta b{color:var(--acc)}
+  .prompt{margin-top:4px;font-size:clamp(16px,5vw,22px);font-weight:800;min-height:26px;padding:0 10px}
+  .prompt.bad{color:#ff8a7a}
+  canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
+  .controls{position:fixed;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom));z-index:4;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;padding:0 12px}
+  .btn{font-weight:800;border:none;border-radius:999px;cursor:pointer}
+  .ghostbtn{background:rgba(255,255,255,.12);color:#fff;font-size:14px;padding:12px 18px;display:none}
+  .ghostbtn.show{display:inline-block}
+  .cta{background:linear-gradient(135deg,var(--c1),var(--c2));color:#06101c;font-size:16px;padding:14px 26px;box-shadow:0 12px 30px -8px rgba(0,0,0,.5)}
+  #win{position:fixed;inset:0;z-index:6;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:rgba(6,10,20,.82);backdrop-filter:blur(3px);padding:24px}
+  #win.show{display:flex;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  #win h1{font-size:clamp(30px,8vw,44px);font-weight:900;margin-bottom:6px}
+  #win p{color:#93a0bd;font-size:16px;margin-bottom:24px}
+  #win .cta{font-size:19px;padding:17px 40px}
+  .pz{animation:pz 1.4s ease-in-out infinite}
+  @keyframes pz{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="top">
+    <div class="brand"><svg width="38" height="20" viewBox="0 0 40 22"><line id="ll1" x1="8" y1="16" x2="32" y2="6" stroke="#3ad1c6" stroke-width="3" stroke-linecap="round"/><circle cx="8" cy="16" r="5" fill="#fff"/><circle cx="32" cy="6" r="5" fill="#fff"/></svg> MONOLINE</div>
+    <div class="meta">Level <b id="lvnum">1</b>/5 · <b id="diff">Easy</b></div>
+    <div class="prompt" id="prompt">Connect every dot — don't lift!</div>
+  </div>
+  <canvas id="c"></canvas>
+</div>
+<div class="controls">
+  <button class="btn ghostbtn" id="restart" onclick="restart()">↺ Restart</button>
+  <button class="btn ghostbtn" id="hint" onclick="hint()">💡 Show me</button>
+  <button class="btn cta pz" id="cta" onclick="install()">Play Free ▸</button>
+</div>
+<div id="win"><h1 id="winh">🎉 You've got it!</h1><p id="winp">505 levels await.</p><button class="btn cta" onclick="install()">Download Monoline — Free</button></div>
+
+<script>/* stable helper */
+function poly(n,r,cx,cy){var a=[];for(var i=0;i<n;i++){var t=-Math.PI/2+i*2*Math.PI/n;a.push([cx+r*Math.cos(t),cy+r*Math.sin(t)]);}return a;}</script>
+
+<script id="cfg">/* 4-brain */
+var CONFIG={
+ theme:{bg1:"#140a1e",bg2:"#20102c",c1:"#b48cff",c2:"#ff6fd0",acc:"#c08cff",glow:"rgba(180,140,255,.6)"},
+ hook:"Is your brain quick enough?",
+ cta:"Test me \u25b8",
+ winH:"\ud83e\udde0 Big brain!",
+ winP:"505 brain-benders inside.",
+ levels:[
+  {d:"Easy",nodes:poly(5,0.37,0.5,0.52),edges:[[0,2],[2,4],[4,1],[1,3],[3,0]],sol:[0,2,4,1,3,0]},
+  {d:"Medium",nodes:poly(7,0.39,0.5,0.52),edges:[[0,3],[3,6],[6,2],[2,5],[5,1],[1,4],[4,0]],sol:[0,3,6,2,5,1,4,0]},
+  {d:"Hard",nodes:poly(8,0.39,0.5,0.52),edges:[[0,3],[3,6],[6,1],[1,4],[4,7],[7,2],[2,5],[5,0]],sol:[0,3,6,1,4,7,2,5,0]},
+  {d:"Hard",nodes:poly(9,0.4,0.5,0.52),edges:[[0,4],[4,8],[8,3],[3,7],[7,2],[2,6],[6,1],[1,5],[5,0]],sol:[0,4,8,3,7,2,6,1,5,0]},
+  {d:"Expert",nodes:poly(5,0.37,0.5,0.52),edges:[[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]],sol:[0,1,2,0,3,1,4,2,3,4,0]}
+ ]
+};</script>
+
+<script>/* ==== ENGINE (stable) ==== */
+var STORE="https://apps.apple.com/app/id6814112233";
+function install(){
+  try{ if(window.ExitApi&&ExitApi.exit){ExitApi.exit();return;} }catch(e){}
+  try{ if(window.mraid&&mraid.open){mraid.open(STORE);return;} }catch(e){}
+  try{ if(window.FbPlayableAd&&FbPlayableAd.onCTAClick){FbPlayableAd.onCTAClick();return;} }catch(e){}
+  try{ window.open(STORE,"_blank"); }catch(e){ location.href=STORE; }
+}
+// apply theme + text
+(function(){var t=CONFIG.theme,rs=document.documentElement.style;
+  rs.setProperty("--bg1",t.bg1);rs.setProperty("--bg2",t.bg2);rs.setProperty("--c1",t.c1);rs.setProperty("--c2",t.c2);rs.setProperty("--acc",t.acc);
+  document.getElementById("ll1").setAttribute("stroke",t.acc);
+  document.getElementById("prompt").textContent=CONFIG.hook;
+  document.getElementById("cta").textContent=CONFIG.cta;
+  document.getElementById("winh").textContent=CONFIG.winH;
+  document.getElementById("winp").textContent=CONFIG.winP;
+})();
+var LEVELS=CONFIG.levels, TH=CONFIG.theme;
+var cv=document.getElementById("c"),ctx=cv.getContext("2d"),W,H,DPR=Math.min(2,window.devicePixelRatio||1);
+var lv=0,N=[],drawn=[],cur=-1,finger=null,solved=false,deadend=false,fails=0,t0=Date.now(),hintEdges=null;
+function L(){return LEVELS[lv];}
+function layout(){
+  var r=document.querySelector(".top").getBoundingClientRect();
+  var cr=document.querySelector(".controls").getBoundingClientRect();
+  W=window.innerWidth;H=(window.visualViewport?window.visualViewport.height:window.innerHeight);
+  cv.width=W*DPR;cv.height=H*DPR;cv.style.width=W+"px";cv.style.height=H+"px";ctx.setTransform(DPR,0,0,DPR,0,0);
+  var topY=r.bottom+8, botY=(cr.top>topY?cr.top:H-80)-12, side=Math.max(16,Math.min(W,botY-topY)*0.08);
+  var size=Math.max(40,Math.min(W-2*side,botY-topY)), x0=(W-size)/2, y0=topY+((botY-topY)-size)/2;
+  N=L().nodes.map(function(p){return{x:x0+p[0]*size,y:y0+p[1]*size};});
+}
+function eb(a,b){var E=L().edges;for(var i=0;i<E.length;i++){if((E[i][0]==a&&E[i][1]==b)||(E[i][0]==b&&E[i][1]==a))return i;}return -1;}
+function nodeAt(x,y){for(var i=0;i<N.length;i++){if((x-N[i].x)*(x-N[i].x)+(y-N[i].y)*(y-N[i].y)<36*36)return i;}return -1;}
+function hasMove(a){var E=L().edges;for(var i=0;i<E.length;i++){if((E[i][0]==a||E[i][1]==a)&&drawn.indexOf(i)<0)return true;}return false;}
+function pos(ev){var t=ev.touches?ev.touches[0]:ev,r=cv.getBoundingClientRect();return{x:t.clientX-r.left,y:t.clientY-r.top};}
+function setPrompt(t,bad){var p=document.getElementById("prompt");p.textContent=t;p.className="prompt"+(bad?" bad":"");}
+function down(ev){ev.preventDefault();if(solved||deadend)return;var p=pos(ev),n=nodeAt(p.x,p.y);if(n<0)return;if(drawn.length==0){cur=n;setPrompt("Trace it in one stroke…");}finger=p;}
+function move(ev){ev.preventDefault();if(solved||deadend||cur<0)return;finger=pos(ev);var n=nodeAt(finger.x,finger.y);
+  if(n>=0&&n!=cur){var i=eb(cur,n);if(i>=0&&drawn.indexOf(i)<0){drawn.push(i);cur=n;hintEdges=null;if(navigator.vibrate)navigator.vibrate(8);
+    if(drawn.length==L().edges.length){winLevel();}else if(!hasMove(cur)){deadend=true;fails++;showHelp();setPrompt("Dead end! Tap Show me",true);}}}}
+function up(ev){finger=null;if(solved||deadend)return;if(cur>=0&&drawn.length>0){fails++;drawn=[];cur=-1;showHelp();setPrompt("You lifted! One stroke, no lifting",true);}else{cur=-1;}}
+cv.addEventListener("touchstart",down,{passive:false});cv.addEventListener("touchmove",move,{passive:false});cv.addEventListener("touchend",up);
+cv.addEventListener("mousedown",down);cv.addEventListener("mousemove",move);window.addEventListener("mouseup",up);
+function showHelp(){document.getElementById("restart").classList.add("show");document.getElementById("hint").classList.add("show");}
+function restart(){drawn=[];cur=-1;finger=null;deadend=false;hintEdges=null;solved=false;setPrompt(CONFIG.hook);}
+function hint(){restart();var sol=L().sol,i=0;hintEdges=[];setPrompt("Follow the glow ✨");
+  var iv=setInterval(function(){if(i>=sol.length-1){clearInterval(iv);setTimeout(function(){hintEdges=null;setPrompt("Your turn!");},900);return;}hintEdges.push(eb(sol[i],sol[i+1]));i++;},260);}
+function winLevel(){solved=true;setPrompt("Solved! ⭐");if(navigator.vibrate)navigator.vibrate([10,40,20]);
+  setTimeout(function(){if(lv>=LEVELS.length-1){document.getElementById("win").classList.add("show");}
+    else{lv++;document.getElementById("lvnum").textContent=(lv+1);document.getElementById("diff").textContent=L().d;restart();layout();}},750);}
+function draw(){
+  ctx.clearRect(0,0,W,H);var E=L().edges;
+  for(var i=0;i<E.length;i++){ctx.strokeStyle="rgba(255,255,255,.1)";ctx.lineWidth=5;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(N[E[i][0]].x,N[E[i][0]].y);ctx.lineTo(N[E[i][1]].x,N[E[i][1]].y);ctx.stroke();}
+  if(hintEdges){var pulse=0.5+0.5*Math.sin(Date.now()/180);for(var i=0;i<hintEdges.length;i++){var e=E[hintEdges[i]];ctx.strokeStyle="rgba(255,216,80,"+(0.5+0.4*pulse)+")";ctx.lineWidth=7;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(N[e[0]].x,N[e[0]].y);ctx.lineTo(N[e[1]].x,N[e[1]].y);ctx.stroke();}}
+  ctx.shadowColor=TH.glow;ctx.shadowBlur=16;
+  for(var i=0;i<drawn.length;i++){var e=E[drawn[i]],a=N[e[0]],b=N[e[1]];var g=ctx.createLinearGradient(a.x,a.y,b.x,b.y);g.addColorStop(0,TH.c1);g.addColorStop(1,TH.c2);ctx.strokeStyle=g;ctx.lineWidth=8;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
+  ctx.shadowBlur=0;
+  if(cur>=0&&finger&&!solved){ctx.strokeStyle="rgba(255,255,255,.6)";ctx.lineWidth=5;ctx.setLineDash([6,8]);ctx.beginPath();ctx.moveTo(N[cur].x,N[cur].y);ctx.lineTo(finger.x,finger.y);ctx.stroke();ctx.setLineDash([]);}
+  for(var i=0;i<N.length;i++){ctx.beginPath();ctx.arc(N[i].x,N[i].y,i==cur?16:13,0,7);ctx.fillStyle="#fff";ctx.fill();ctx.beginPath();ctx.arc(N[i].x,N[i].y,6,0,7);ctx.fillStyle=(i==cur)?TH.acc:TH.bg1;ctx.fill();}
+  requestAnimationFrame(draw);
+}
+window.addEventListener("resize",layout);
+window.addEventListener("orientationchange",function(){setTimeout(layout,300);});
+if(window.visualViewport)window.visualViewport.addEventListener("resize",layout);
+document.getElementById("diff").textContent=L().d;
+layout();setTimeout(layout,200);requestAnimationFrame(draw);
+setInterval(function(){if(!solved&&(Date.now()-t0)>14000){showHelp();}},2000);
+</script>
+</body>
+</html>
