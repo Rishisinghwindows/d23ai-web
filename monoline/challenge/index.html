@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Monoline Challenge — Can you solve it in one line?</title>
+<meta name="description" content="A friend dares you: solve this Monoline puzzle in a single unbroken line. One line, every dot, no lifting. Download free and take the challenge.">
+<!-- OpenGraph / rich preview (WhatsApp, iMessage, social) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="You've been challenged! 🎯 Can you solve it in one line?">
+<meta property="og:description" content="One line, every dot, never lift your finger. Download Monoline free and beat your friend's level.">
+<meta property="og:image" content="https://d23ai.in/monoline/challenge/og.jpg">
+<meta property="og:url" content="https://d23ai.in/monoline/challenge">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="You've been challenged! 🎯 Monoline">
+<meta name="twitter:description" content="Solve it in one unbroken line. Download free and take the challenge.">
+<meta name="twitter:image" content="https://d23ai.in/monoline/challenge/og.jpg">
+<style>
+  :root{ --bg1:#0a0e1a; --bg2:#121829; --teal:#3ad1c6; --blue:#5b8cff; --fg:#e9edf6; --muted:#93a0bd; }
+  *{box-sizing:border-box} html,body{margin:0;height:100%}
+  body{background:radial-gradient(1200px 700px at 20% -10%, #1a2440 0%, var(--bg1) 55%), var(--bg2);
+       color:var(--fg); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+       display:flex; align-items:center; justify-content:center; padding:28px; text-align:center;}
+  .wrap{max-width:560px;width:100%}
+  .logo{width:72px;height:72px;margin:0 auto 20px;border-radius:20px;
+        background:linear-gradient(135deg,var(--teal),var(--blue));display:flex;align-items:center;justify-content:center;
+        box-shadow:0 14px 44px -10px rgba(91,140,255,.6)}
+  .logo svg{width:38px;height:38px}
+  .eyebrow{letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:700;font-size:13px;margin:0 0 10px}
+  h1{font-size:clamp(28px,6vw,42px);line-height:1.1;margin:0 0 14px;font-weight:800}
+  h1 .lvl{color:var(--teal)}
+  p.sub{color:var(--muted);font-size:18px;margin:0 0 30px;line-height:1.5}
+  .cta{display:inline-block;background:linear-gradient(135deg,var(--teal),var(--blue));color:#07121f;
+       font-weight:800;font-size:19px;text-decoration:none;padding:17px 34px;border-radius:999px;
+       box-shadow:0 12px 34px -8px rgba(58,209,198,.6);transition:transform .15s ease}
+  .cta:hover{transform:translateY(-2px)}
+  .rules{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:30px 0 0;color:var(--muted);font-size:14px}
+  .rules span{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);padding:8px 14px;border-radius:999px}
+  footer{margin-top:34px;color:#5e6c88;font-size:13px}
+  footer a{color:var(--teal);text-decoration:none}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="18" r="2.6" fill="#fff"/><circle cx="18" cy="6" r="2.6" fill="#fff"/><line x1="7.7" y1="16.3" x2="16.3" y2="7.7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </div>
+    <p class="eyebrow">You've been challenged</p>
+    <h1 id="headline">Can you solve <span class="lvl" id="lvl">this level</span><br>in one line?</h1>
+    <p class="sub">Connect every dot in a single unbroken stroke — never lift your finger, never retrace a line. Your friend already did. Your turn. 😏</p>
+    <a class="cta" id="cta" href="https://apps.apple.com/app/id6814112233">Download Monoline — Free</a>
+    <div class="rules">
+      <span>🎯 One line</span><span>✋ No lifting</span><span>🧩 505 levels</span><span>📶 Play offline</span>
+    </div>
+    <footer>Monoline · One Line Puzzle · <a href="https://d23ai.in">d23ai.in</a></footer>
+  </div>
+<script>
+  // Personalize from ?level=N&name=...
+  (function(){
+    var p=new URLSearchParams(location.search);
+    var lvl=p.get("level"), name=p.get("name");
+    var el=document.getElementById("lvl");
+    if(name){ el.textContent='"'+decodeURIComponent(name)+'"'; }
+    else if(lvl){ el.textContent="Level "+lvl; }
+    // (If a Universal Link / app deep-link is added later, redirect installed users here.)
+  })();
+</script>
+</body>
+</html>
