@@ -5,64 +5,85 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Monoline Challenge — Can you solve it in one line?</title>
 <meta name="description" content="A friend dares you: solve this Monoline puzzle in a single unbroken line. One line, every dot, no lifting. Download free and take the challenge.">
-<!-- OpenGraph / rich preview (WhatsApp, iMessage, social) -->
+<link rel="canonical" href="https://d23ai.in/monoline/challenge/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="You've been challenged! 🎯 Can you solve it in one line?">
 <meta property="og:description" content="One line, every dot, never lift your finger. Download Monoline free and beat your friend's level.">
 <meta property="og:image" content="https://d23ai.in/monoline/challenge/og.jpg">
-<meta property="og:url" content="https://d23ai.in/monoline/challenge">
+<meta property="og:url" content="https://d23ai.in/monoline/challenge/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="You've been challenged! 🎯 Monoline">
 <meta name="twitter:description" content="Solve it in one unbroken line. Download free and take the challenge.">
 <meta name="twitter:image" content="https://d23ai.in/monoline/challenge/og.jpg">
+<meta name="theme-color" content="#070a14">
 <style>
-  :root{ --bg1:#0a0e1a; --bg2:#121829; --teal:#3ad1c6; --blue:#5b8cff; --fg:#e9edf6; --muted:#93a0bd; }
-  *{box-sizing:border-box} html,body{margin:0;height:100%}
-  body{background:radial-gradient(1200px 700px at 20% -10%, #1a2440 0%, var(--bg1) 55%), var(--bg2);
-       color:var(--fg); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
-       display:flex; align-items:center; justify-content:center; padding:28px; text-align:center;}
+  :root{ --bg1:#070a14; --bg2:#0e1324; --teal:#3ad1c6; --blue:#5b8cff; --violet:#9a7cff; --gold:#ffd24d; --fg:#eef2fb; --muted:#97a3c2; --line:rgba(255,255,255,.09); }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;
+    background:
+      radial-gradient(1000px 640px at 78% -10%, rgba(255,210,77,.12), transparent 58%),
+      radial-gradient(900px 620px at 15% 4%, rgba(154,124,255,.18), transparent 56%),
+      var(--bg1);
+    color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+    display:flex;align-items:center;justify-content:center;padding:28px;text-align:center;-webkit-font-smoothing:antialiased}
   .wrap{max-width:560px;width:100%}
-  .logo{width:72px;height:72px;margin:0 auto 20px;border-radius:20px;
-        background:linear-gradient(135deg,var(--teal),var(--blue));display:flex;align-items:center;justify-content:center;
-        box-shadow:0 14px 44px -10px rgba(91,140,255,.6)}
-  .logo svg{width:38px;height:38px}
-  .eyebrow{letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:700;font-size:13px;margin:0 0 10px}
-  h1{font-size:clamp(28px,6vw,42px);line-height:1.1;margin:0 0 14px;font-weight:800}
-  h1 .lvl{color:var(--teal)}
-  p.sub{color:var(--muted);font-size:18px;margin:0 0 30px;line-height:1.5}
-  .cta{display:inline-block;background:linear-gradient(135deg,var(--teal),var(--blue));color:#07121f;
-       font-weight:800;font-size:19px;text-decoration:none;padding:17px 34px;border-radius:999px;
-       box-shadow:0 12px 34px -8px rgba(58,209,198,.6);transition:transform .15s ease}
+  .badge{width:92px;height:92px;margin:0 auto 20px;border-radius:26px;position:relative;
+    background:linear-gradient(135deg,var(--gold),#ff8a3d);display:grid;place-items:center;
+    box-shadow:0 18px 50px -10px rgba(255,160,60,.6);animation:pop .6s cubic-bezier(.2,1.3,.5,1) both}
+  .badge svg{width:46px;height:46px}
+  @keyframes pop{from{transform:scale(.4) rotate(-12deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+  .eyebrow{letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:800;font-size:13px;margin-bottom:12px}
+  h1{font-size:clamp(30px,7vw,46px);line-height:1.08;font-weight:850;letter-spacing:-.02em;margin-bottom:14px;text-wrap:balance}
+  h1 .lvl{background:linear-gradient(120deg,var(--teal),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+  p.sub{color:var(--muted);font-size:18px;margin-bottom:26px;line-height:1.5;text-wrap:balance}
+  .stage{max-width:300px;margin:0 auto 26px}
+  .stage svg{width:100%;height:auto;overflow:visible}
+  .draw{animation:draw 2.4s ease forwards .4s}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--teal),var(--blue));color:#05101e;
+    font-weight:800;font-size:19px;text-decoration:none;padding:17px 34px;border-radius:999px;
+    box-shadow:0 14px 40px -8px rgba(58,209,198,.65);transition:transform .15s ease}
   .cta:hover{transform:translateY(-2px)}
-  .rules{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:30px 0 0;color:var(--muted);font-size:14px}
-  .rules span{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);padding:8px 14px;border-radius:999px}
-  footer{margin-top:34px;color:#5e6c88;font-size:13px}
+  .rules{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:28px;color:var(--muted);font-size:14px}
+  .rules span{background:rgba(255,255,255,.05);border:1px solid var(--line);padding:8px 14px;border-radius:999px}
+  footer{margin-top:30px;color:#6b789b;font-size:13px}
   footer a{color:var(--teal);text-decoration:none}
+  @media (prefers-reduced-motion: reduce){.badge{animation:none}.draw{animation:none;stroke-dashoffset:0}}
 </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="logo" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="18" r="2.6" fill="#fff"/><circle cx="18" cy="6" r="2.6" fill="#fff"/><line x1="7.7" y1="16.3" x2="16.3" y2="7.7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+    <div class="badge" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 4l4 4m8-4l-4 4m-4 0v12m-5 0h10" stroke="#3a1a00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.4" fill="#3a1a00"/></svg>
     </div>
-    <p class="eyebrow">You've been challenged</p>
-    <h1 id="headline">Can you solve <span class="lvl" id="lvl">this level</span><br>in one line?</h1>
-    <p class="sub">Connect every dot in a single unbroken stroke — never lift your finger, never retrace a line. Your friend already did. Your turn. 😏</p>
-    <a class="cta" id="cta" href="https://apps.apple.com/app/id6814112233">Download Monoline — Free</a>
-    <div class="rules">
-      <span>🎯 One line</span><span>✋ No lifting</span><span>🧩 505 levels</span><span>📶 Play offline</span>
+    <p class="eyebrow">A friend dares you ⚔️</p>
+    <h1>Can you solve <span class="lvl" id="lvl">this level</span><br>in one line?</h1>
+    <p class="sub">Connect every dot in a single unbroken stroke — never lift your finger, never retrace a line. They already did it. Your move. 😏</p>
+
+    <div class="stage" aria-hidden="true">
+      <svg viewBox="0 0 300 180" fill="none">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3ad1c6"/><stop offset="1" stop-color="#5b8cff"/></linearGradient></defs>
+        <g fill="rgba(255,255,255,.18)"><circle cx="45" cy="45" r="6"/><circle cx="150" cy="30" r="6"/><circle cx="255" cy="45" r="6"/><circle cx="95" cy="120" r="6"/><circle cx="205" cy="120" r="6"/><circle cx="150" cy="160" r="6"/></g>
+        <path class="draw" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 8px rgba(58,209,198,.6))"
+          d="M45 45 L150 30 L255 45 L205 120 L150 160 L95 120 Z" stroke="url(#lg)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <g fill="#fff"><circle cx="45" cy="45" r="6"/><circle cx="150" cy="30" r="6"/><circle cx="255" cy="45" r="6"/><circle cx="95" cy="120" r="6"/><circle cx="205" cy="120" r="6"/><circle cx="150" cy="160" r="6"/></g>
+      </svg>
     </div>
-    <footer>Monoline · One Line Puzzle · <a href="https://d23ai.in">d23ai.in</a></footer>
+
+    <a class="cta" id="cta" href="https://apps.apple.com/us/app/monoline-one-line-puzzle/id6814112233">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.9c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.5-.1-2.8.8-3.6.8s-1.9-.8-3.1-.8C6.7 7.6 5.3 8.5 4.5 10c-1.7 2.9-.4 7.2 1.2 9.6.8 1.1 1.7 2.4 2.9 2.4 1.2 0 1.6-.8 3.1-.8s1.8.8 3.1.7c1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-1-2.6-3.9zM14 6c.6-.8 1.1-1.9.9-3-.9.1-2.1.6-2.8 1.5-.6.7-1.1 1.8-1 2.9 1 .1 2.2-.5 2.9-1.4z"/></svg>
+      Download Monoline — Free
+    </a>
+
+    <div class="rules"><span>🎯 One line</span><span>✋ No lifting</span><span>🧩 505 levels</span><span>📶 Offline</span></div>
+    <footer>Monoline · One Line Puzzle · <a href="https://d23ai.in/monoline/">d23ai.in</a></footer>
   </div>
 <script>
-  // Personalize from ?level=N&name=...
   (function(){
     var p=new URLSearchParams(location.search);
-    var lvl=p.get("level"), name=p.get("name");
-    var el=document.getElementById("lvl");
-    if(name){ el.textContent='"'+decodeURIComponent(name)+'"'; }
-    else if(lvl){ el.textContent="Level "+lvl; }
-    // (If a Universal Link / app deep-link is added later, redirect installed users here.)
+    var lvl=p.get("level"), name=p.get("name"), el=document.getElementById("lvl");
+    if(name){ try{ el.textContent='"'+decodeURIComponent(name)+'"'; }catch(e){ el.textContent="this level"; } }
+    else if(lvl && /^\d+$/.test(lvl)){ el.textContent="Level "+lvl; }
   })();
 </script>
 </body>
