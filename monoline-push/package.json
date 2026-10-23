@@ -1,0 +1,8 @@
+{
+  "name": "monoline-push",
+  "private": true,
+  "description": "Free automated daily funny push for Monoline (GitHub Actions + FCM)",
+  "dependencies": {
+    "firebase-admin": "^12.6.0"
+  }
+}
