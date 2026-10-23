@@ -108,10 +108,28 @@
   @media (prefers-reduced-motion: reduce){
     .draw{animation:none;stroke-dashoffset:0}.float{animation:none}
   }
+
+  /* —— Seasonal: Hollow's Eve (shown only during the window) —— */
+  .hw-ribbon{display:none;background:linear-gradient(90deg,#ff7a18,#9a2bd6);color:#fff;
+    text-align:center;font-weight:800;padding:11px 16px;font-size:14.5px;letter-spacing:.01em}
+  body.hw .hw-ribbon{display:block}
+  .hw-bat{display:none;position:absolute;font-size:26px;opacity:.85;animation:bat 6s ease-in-out infinite}
+  body.hw .hw-bat{display:block}
+  .hw-bat.b1{top:120px;left:8%;animation-delay:0s}
+  .hw-bat.b2{top:180px;right:12%;animation-delay:1.4s;font-size:20px}
+  .hw-bat.b3{top:90px;right:28%;animation-delay:2.6s;font-size:16px}
+  @keyframes bat{0%,100%{transform:translate(0,0) rotate(-4deg)}50%{transform:translate(14px,-16px) rotate(4deg)}}
+  body.hw .hero h1 .t{background:linear-gradient(120deg,#ffb020,#ff7a18 55%,#9a2bd6)!important;
+    -webkit-background-clip:text;background-clip:text;color:transparent}
 </style>
 </head>
 <body>
+<div class="hw-ribbon">🎃 Hollow's Eve has arrived — spooky one-line tales with Lin, Knot &amp; Pip await inside Monoline! 👻</div>
 <div class="wrap">
+
+  <span class="hw-bat b1" aria-hidden="true">🦇</span>
+  <span class="hw-bat b2" aria-hidden="true">🦇</span>
+  <span class="hw-bat b3" aria-hidden="true">🦇</span>
 
   <nav>
     <a class="brand" href="/monoline/">
@@ -173,7 +191,7 @@
     <div class="sec-head"><p class="eyebrow">Features</p><h2>More than a puzzle</h2></div>
     <div class="grid">
       <div class="card"><div class="ic">🧩</div><h3>505 handcrafted levels</h3><p>From a gentle triangle to fiendish lattices — every level is designed by hand.</p></div>
-      <div class="card"><div class="ic">✨</div><h3>A story to untangle</h3><p>Meet Lin and friends across an animated 12-chapter tale told between levels.</p></div>
+      <div class="card"><div class="ic">✨</div><h3>A story to untangle</h3><p>Meet Lin and friends across an animated 12-chapter tale — plus seasonal surprises like the <strong>Hollow's Eve</strong> event. 🎃</p></div>
       <div class="card"><div class="ic">📶</div><h3>Plays anywhere, offline</h3><p>No internet needed. Perfect for flights, commutes and waiting rooms.</p></div>
       <div class="card"><div class="ic">🎨</div><h3>Beautiful themes</h3><p>Unlock calming color worlds as you earn stars.</p></div>
       <div class="card"><div class="ic">🔥</div><h3>Daily challenge</h3><p>A fresh puzzle every day and a streak worth protecting.</p></div>
