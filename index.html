@@ -4,54 +4,91 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>D23 AI — thoughtful software &amp; mobile games</title>
-<meta name="description" content="D23 AI builds thoughtful software and delightful mobile games. Makers of Monoline, the one-line puzzle.">
+<meta name="description" content="D23 AI builds thoughtful software and delightful mobile games. Makers of Monoline (one-line puzzle) and AI Legal Guru.">
 <link rel="canonical" href="https://d23ai.in/">
 <meta property="og:title" content="D23 AI">
-<meta property="og:description" content="Thoughtful software & delightful mobile games. Makers of Monoline.">
+<meta property="og:description" content="Thoughtful software & delightful mobile games. Makers of Monoline and AI Legal Guru.">
 <meta property="og:url" content="https://d23ai.in/">
 <meta name="theme-color" content="#070a14">
 <style>
-  :root{ --bg1:#070a14; --teal:#3ad1c6; --blue:#5b8cff; --violet:#9a7cff; --fg:#eef2fb; --muted:#97a3c2; --line:rgba(255,255,255,.09); --panel:#121829; }
+  :root{ --bg1:#070a14; --teal:#3ad1c6; --blue:#5b8cff; --violet:#9a7cff; --amber:#f0b64a;
+    --fg:#eef2fb; --muted:#97a3c2; --line:rgba(255,255,255,.09); --panel:#121829; }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{min-height:100vh;color:var(--fg);
+  html,body{min-height:100%}
+  body{min-height:100vh;color:var(--fg);overflow-x:hidden;
     background:radial-gradient(1000px 640px at 80% -10%,rgba(58,209,198,.14),transparent 58%),
                radial-gradient(900px 600px at 10% 6%,rgba(154,124,255,.16),transparent 56%),var(--bg1);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
-    display:flex;align-items:center;justify-content:center;padding:28px;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:680px;width:100%;text-align:center}
-  .logo{width:78px;height:78px;margin:0 auto 22px;border-radius:22px;
+    display:flex;align-items:center;justify-content:center;padding:44px 28px;-webkit-font-smoothing:antialiased}
+  #net{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+  .wrap{max-width:680px;width:100%;text-align:center;position:relative;z-index:1}
+
+  .logo{width:84px;height:84px;margin:0 auto 24px;border-radius:24px;
     background:linear-gradient(135deg,var(--teal),var(--blue));display:grid;place-items:center;
-    box-shadow:0 16px 46px -10px rgba(91,140,255,.6)}
-  .logo svg{width:40px;height:40px}
-  h1{font-size:clamp(34px,7vw,52px);font-weight:850;letter-spacing:-.02em;margin-bottom:8px}
+    box-shadow:0 16px 46px -10px rgba(91,140,255,.6);
+    animation:float 5s ease-in-out infinite, glowpulse 4s ease-in-out infinite}
+  .logo svg{width:42px;height:42px}
+  .logo .seg{stroke-dasharray:14;animation:redraw 3.6s ease-in-out infinite}
+
+  h1{font-size:clamp(36px,7.5vw,56px);font-weight:850;letter-spacing:-.02em;margin-bottom:8px;
+    background:linear-gradient(100deg,var(--teal),var(--blue),var(--violet),var(--teal));
+    background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:shimmer 7s linear infinite}
   p.tag{color:var(--muted);font-size:clamp(16px,2.6vw,19px);margin-bottom:34px;text-wrap:balance}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);opacity:.8;margin:0 0 14px}
+
   .feature{display:flex;gap:16px;align-items:center;text-align:left;text-decoration:none;color:inherit;
+    position:relative;overflow:hidden;
     background:linear-gradient(180deg,var(--panel),rgba(18,24,41,.5));border:1px solid var(--line);
-    border-radius:22px;padding:20px 22px;margin-bottom:16px;transition:transform .15s ease,border-color .15s ease}
-  .feature:hover{transform:translateY(-2px);border-color:rgba(58,209,198,.5)}
-  .feature .art{width:56px;height:56px;border-radius:16px;flex:none;display:grid;place-items:center;
+    border-radius:22px;padding:20px 22px;margin-bottom:14px;
+    transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+  .feature::after{content:"";position:absolute;inset:0;border-radius:22px;padding:1px;
+    background:linear-gradient(120deg,transparent,rgba(58,209,198,.6),rgba(154,124,255,.5),transparent);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .2s ease}
+  .feature:hover{transform:translateY(-3px);box-shadow:0 20px 50px -24px rgba(58,209,198,.5)}
+  .feature:hover::after{opacity:1}
+  .feature .art{width:58px;height:58px;border-radius:16px;flex:none;display:grid;place-items:center;
     background:linear-gradient(135deg,rgba(58,209,198,.22),rgba(91,140,255,.22));border:1px solid var(--line)}
   .feature h3{font-size:18px;margin-bottom:3px}
   .feature p{color:var(--muted);font-size:14px}
-  .feature .go{margin-left:auto;color:var(--teal);font-weight:800;font-size:22px;flex:none}
-  .cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:6px}
-  @media(max-width:520px){.cards{grid-template-columns:1fr}}
-  .mini{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:16px;padding:16px;
-    text-decoration:none;color:inherit;transition:border-color .15s ease}
-  .mini:hover{border-color:rgba(58,209,198,.5)}
-  .mini h4{font-size:15px;margin-bottom:2px}
-  .mini span{color:var(--muted);font-size:13px}
-  footer{margin-top:34px;color:#6b789b;font-size:13px}
+  .feature .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;
+    color:var(--teal);background:rgba(58,209,198,.12);border:1px solid rgba(58,209,198,.3);
+    border-radius:99px;padding:2px 9px;margin-top:7px}
+  .feature .go{margin-left:auto;color:var(--teal);font-weight:800;font-size:22px;flex:none;transition:transform .2s ease}
+  .feature:hover .go{transform:translateX(4px)}
+  /* amber theme for AI Legal Guru */
+  .feature.legal .art{background:linear-gradient(135deg,rgba(240,182,74,.24),rgba(240,120,74,.2))}
+  .feature.legal .badge{color:var(--amber);background:rgba(240,182,74,.12);border-color:rgba(240,182,74,.3)}
+  .feature.legal .go{color:var(--amber)}
+  .feature.legal::after{background:linear-gradient(120deg,transparent,rgba(240,182,74,.6),rgba(240,120,74,.5),transparent)}
+  .feature.legal:hover{box-shadow:0 20px 50px -24px rgba(240,182,74,.5)}
+
+  .links{margin-top:22px;font-size:13px;color:var(--muted)}
+  .links a{color:var(--muted);text-decoration:none;white-space:nowrap}
+  .links a:hover{color:var(--teal)}
+  .links .dot{opacity:.4;margin:0 8px}
+  footer{margin-top:18px;color:#6b789b;font-size:13px}
   footer a{color:var(--teal);text-decoration:none}
+
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  @keyframes glowpulse{0%,100%{box-shadow:0 16px 46px -10px rgba(91,140,255,.55)}50%{box-shadow:0 20px 60px -8px rgba(58,209,198,.7)}}
+  @keyframes shimmer{to{background-position:300% 0}}
+  @keyframes redraw{0%{stroke-dashoffset:14}45%,100%{stroke-dashoffset:0}}
+  @media(prefers-reduced-motion:reduce){ .logo,.logo .seg,h1{animation:none} #net{display:none} }
 </style>
 </head>
 <body>
+  <canvas id="net" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="logo" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="18" r="2.6" fill="#fff"/><circle cx="18" cy="6" r="2.6" fill="#fff"/><line x1="7.7" y1="16.3" x2="16.3" y2="7.7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="18" r="2.6" fill="#fff"/><circle cx="18" cy="6" r="2.6" fill="#fff"/><line class="seg" x1="7.7" y1="16.3" x2="16.3" y2="7.7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
     </div>
     <h1>D23 AI</h1>
     <p class="tag">Thoughtful software &amp; delightful mobile games.</p>
+
+    <p class="eyebrow">Our apps</p>
 
     <a class="feature" href="/monoline/">
       <span class="art" aria-hidden="true">
@@ -60,17 +97,65 @@
       <div>
         <h3>Monoline — One Line Puzzle</h3>
         <p>505 one-stroke puzzles, a charming story, offline play. Free on the App Store.</p>
+        <span class="badge">Game · iOS</span>
       </div>
       <span class="go" aria-hidden="true">→</span>
     </a>
 
-    <div class="cards">
-      <a class="mini" href="/monoline/support/"><h4>Support</h4><span>Get help &amp; FAQ</span></a>
-      <a class="mini" href="/monoline/privacy/"><h4>Privacy</h4><span>How we handle data</span></a>
-      <a class="mini" href="mailto:d23ai.in@gmail.com"><h4>Contact</h4><span>d23ai.in@gmail.com</span></a>
-    </div>
+    <a class="feature legal" href="https://apps.apple.com/app/id6760929257">
+      <span class="art" aria-hidden="true">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#f0b64a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="4.5" x2="12" y2="20"/><line x1="7.5" y1="20" x2="16.5" y2="20"/>
+          <line x1="5" y1="7" x2="19" y2="7"/>
+          <path d="M5 7 L2.9 11.6 H7.1 Z" fill="rgba(240,182,74,.2)"/>
+          <path d="M19 7 L16.9 11.6 H21.1 Z" fill="rgba(240,182,74,.2)"/>
+          <circle cx="12" cy="7" r="1.1" fill="#f0b64a" stroke="none"/>
+        </svg>
+      </span>
+      <div>
+        <h3>AI Legal Guru</h3>
+        <p>Plain-English legal help, powered by AI — ask questions and understand documents. On the App Store.</p>
+        <span class="badge">App · iOS</span>
+      </div>
+      <span class="go" aria-hidden="true">→</span>
+    </a>
 
+    <div class="links">
+      <a href="/monoline/support/">Support</a><span class="dot">·</span>
+      <a href="/monoline/privacy/">Monoline Privacy</a><span class="dot">·</span>
+      <a href="/ailegalguru/privacy/">AI Legal Guru Privacy</a><span class="dot">·</span>
+      <a href="/ailegalguru/terms/">Terms</a>
+    </div>
     <footer>© 2026 D23 AI · <a href="mailto:d23ai.in@gmail.com">d23ai.in@gmail.com</a></footer>
   </div>
+
+<script>
+(function(){
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var c = document.getElementById('net'), x = c.getContext('2d');
+  var W,H,DPR,nodes,mouse={x:-999,y:-999};
+  function size(){ DPR=Math.min(window.devicePixelRatio||1,2); W=c.width=innerWidth*DPR; H=c.height=innerHeight*DPR; }
+  function init(){ size();
+    var count=Math.min(70,Math.round(innerWidth*innerHeight/22000)); nodes=[];
+    for(var i=0;i<count;i++) nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*0.25*DPR,vy:(Math.random()-.5)*0.25*DPR});
+  }
+  var cols=['58,209,198','91,140,255','154,124,255'];
+  function tick(){ x.clearRect(0,0,W,H); var maxD=150*DPR;
+    for(var i=0;i<nodes.length;i++){ var n=nodes[i]; n.x+=n.vx; n.y+=n.vy;
+      if(n.x<0||n.x>W)n.vx*=-1; if(n.y<0||n.y>H)n.vy*=-1;
+      for(var j=i+1;j<nodes.length;j++){ var m=nodes[j],dx=n.x-m.x,dy=n.y-m.y,d=Math.hypot(dx,dy);
+        if(d<maxD){ x.strokeStyle='rgba('+cols[(i+j)%3]+','+(0.14*(1-d/maxD))+')'; x.lineWidth=1*DPR; x.beginPath(); x.moveTo(n.x,n.y); x.lineTo(m.x,m.y); x.stroke(); } }
+      if(mouse.x>-900){ var ddx=n.x-mouse.x,ddy=n.y-mouse.y,dd=Math.hypot(ddx,ddy),md=200*DPR;
+        if(dd<md){ x.strokeStyle='rgba(58,209,198,'+(0.3*(1-dd/md))+')'; x.lineWidth=1.2*DPR; x.beginPath(); x.moveTo(n.x,n.y); x.lineTo(mouse.x,mouse.y); x.stroke(); } }
+      x.fillStyle='rgba('+cols[i%3]+',0.8)'; x.beginPath(); x.arc(n.x,n.y,1.8*DPR,0,7); x.fill();
+    }
+    requestAnimationFrame(tick);
+  }
+  addEventListener('resize',init);
+  addEventListener('mousemove',function(e){mouse.x=e.clientX*DPR;mouse.y=e.clientY*DPR;});
+  addEventListener('mouseout',function(){mouse.x=mouse.y=-999;});
+  init(); tick();
+})();
+</script>
 </body>
 </html>
