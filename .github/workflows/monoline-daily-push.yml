@@ -15,6 +15,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+      - name: Check required secret
+        env:
+          FIREBASE_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -z "$FIREBASE_SA" ]; then
+            echo "::error title=Missing secret::FIREBASE_SERVICE_ACCOUNT is not set."
+            echo "Fix (one-time):"
+            echo "  1. Firebase Console > Project settings > Service accounts > Generate new private key (downloads JSON)."
+            echo "  2. GitHub repo > Settings > Secrets and variables > Actions > New repository secret."
+            echo "  3. Name: FIREBASE_SERVICE_ACCOUNT   Value: paste the ENTIRE JSON file contents."
+            echo "  4. Re-run this workflow (Actions tab > Run workflow)."
+            exit 1
+          fi
+          echo "Secret present (length ${#FIREBASE_SA})."
       - name: Install deps
         working-directory: monoline-push
         run: npm install --no-audit --no-fund
