@@ -24,7 +24,32 @@ if (!sa.project_id) {
 }
 admin.initializeApp({ credential: admin.credential.cert(sa) });
 
+const db = admin.firestore();
 const LANGS = Object.keys(MESSAGES);
+
+// Best-effort once-per-(day,slot) guard in Firestore so a re-run or a duplicate
+// schedule firing can't send the same push twice. A transaction means two runs
+// racing can't both win. Returns:
+//   "claim"  — we reserved this slot (first time today) → SEND
+//   "dup"    — already sent today for this slot → SKIP
+//   "proceed"— couldn't check (Firestore disabled/unreachable) → SEND anyway
+// We proceed-on-error rather than block: the PUSH_SLOT fix is the primary dup
+// guard, so never let a Firestore hiccup silence all notifications.
+async function claimSend(dateKey, slot) {
+  const ref = db.collection("push_log").doc(`${dateKey}-slot${slot}`);
+  try {
+    const claimed = await db.runTransaction(async (tx) => {
+      const snap = await tx.get(ref);
+      if (snap.exists) return false; // already sent today for this slot
+      tx.set(ref, { sentAt: admin.firestore.FieldValue.serverTimestamp(), slot });
+      return true;
+    });
+    return claimed ? "claim" : "dup";
+  } catch (e) {
+    console.warn("Dedup guard unavailable (sending anyway):", String(e));
+    return "proceed";
+  }
+}
 
 // Deterministic "of the day" index (rotates, same for everyone that day).
 function dayIndex(d) {
@@ -60,6 +85,15 @@ async function main() {
   // Off-season: the early slot stays silent so users still get exactly one a day.
   if (!halloween && slot === 0) {
     console.log("Off-season early slot — skipping to keep 1 message/day.");
+    return;
+  }
+
+  // Once-per-(day,slot) guard: if this slot already went out today, stop here so
+  // a GitHub re-run or a duplicate schedule firing can't buzz everyone twice.
+  const dateKey = now.toISOString().slice(0, 10); // YYYY-MM-DD (UTC)
+  const claim = await claimSend(dateKey, slot);
+  if (claim === "dup") {
+    console.log(`Slot ${slot} for ${dateKey} already sent — skipping to avoid a duplicate.`);
     return;
   }
 
