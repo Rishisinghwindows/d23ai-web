@@ -39,4 +39,8 @@ jobs:
         working-directory: monoline-push
         env:
           FIREBASE_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          # Which schedule triggered this run decides the message slot — robust to
+          # GitHub's cron delays. "30 3 * * *" = early (slot 0), else main (slot 1).
+          # A manual dispatch has no schedule → treated as the main run.
+          PUSH_SLOT: ${{ github.event.schedule == '30 3 * * *' && '0' || '1' }}
         run: node send.js

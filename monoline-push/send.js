@@ -51,7 +51,10 @@ async function sendTo(lang, m) {
 
 async function main() {
   const now = new Date();
-  const slot = now.getUTCHours() < 8 ? 0 : 1; // 0 = early (03:30), 1 = main (11:30)
+  // Slot comes from which cron fired (passed by the workflow as PUSH_SLOT), NOT
+  // the wall-clock hour — GitHub's scheduler can run crons very late, which would
+  // otherwise make both daily runs pick the same slot. 0 = early, 1 = main.
+  const slot = process.env.PUSH_SLOT === "0" ? 0 : 1;
   const halloween = isHalloween(now);
 
   // Off-season: the early slot stays silent so users still get exactly one a day.
