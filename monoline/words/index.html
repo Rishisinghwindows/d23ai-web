@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Word Worlds — Learn real words, one line at a time · Monoline</title>
+<meta name="description" content="Trace hidden words from a cluster of glowing letters. Find every word, learn its meaning, hear it spoken. 270 levels, a bedtime story, and spaced-repetition review. Free on the App Store.">
+<link rel="canonical" href="https://d23ai.in/monoline/words/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Word Worlds — Learn words, one line at a time">
+<meta property="og:description" content="Trace hidden words from a cluster of letters. Find them all, learn each meaning, light up a sky of lost words. Free on the App Store.">
+<meta property="og:image" content="https://d23ai.in/monoline/og.jpg">
+<meta property="og:url" content="https://d23ai.in/monoline/words/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Word Worlds — Monoline">
+<meta name="twitter:description" content="Trace hidden words, learn their meaning, light up the sky. Free on the App Store.">
+<meta name="theme-color" content="#0a0e1a">
+<style>
+  :root{
+    --bg1:#070a14; --bg2:#0e1324; --panel:#141a30; --panel2:#1a2140;
+    --teal:#3ad1c6; --blue:#5b8cff; --violet:#9a7cff; --pink:#ff6aa0;
+    --gold:#ffd24d; --fg:#eef2fb; --muted:#97a3c2; --line:rgba(255,255,255,.09);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1100px 680px at 80% -8%, rgba(58,209,198,.16), transparent 60%),
+      radial-gradient(900px 620px at 10% 6%, rgba(91,140,255,.16), transparent 58%),
+      var(--bg1);
+    color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+  .eyebrow{letter-spacing:.16em;text-transform:uppercase;color:var(--teal);font-weight:700;font-size:13px}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px}
+  .mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--teal),var(--blue));
+        display:grid;place-items:center;box-shadow:0 10px 30px -8px rgba(91,140,255,.6);font-weight:900;color:#05101e}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:800;border-radius:999px;cursor:pointer;
+       transition:transform .15s ease, box-shadow .15s ease}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{background:linear-gradient(135deg,var(--teal),var(--blue));color:#05101e;
+       padding:13px 24px;box-shadow:0 14px 38px -10px rgba(58,209,198,.7)}
+  .btn-ghost{border:1px solid var(--line);padding:11px 20px;color:var(--fg);background:rgba(255,255,255,.03)}
+
+  /* Challenge banner (shown when ?letters= is present) */
+  #challenge{display:none;margin:10px 0 0}
+  #challenge .card{background:linear-gradient(135deg,rgba(58,209,198,.16),rgba(154,124,255,.12));
+     border:1px solid var(--line);border-radius:20px;padding:22px;text-align:center}
+  #challenge .tiles{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px 0 4px}
+  #challenge .tile{width:48px;height:54px;border-radius:12px;display:grid;place-items:center;
+     font-weight:900;font-size:24px;color:#05101e;background:linear-gradient(135deg,var(--teal),var(--blue))}
+
+  header.hero{text-align:center;padding:30px 0 30px}
+  .hero h1{font-size:clamp(38px,8vw,72px);line-height:1.02;font-weight:850;letter-spacing:-.02em;text-wrap:balance;margin:14px 0 10px}
+  .hero h1 .t{background:linear-gradient(120deg,var(--teal),var(--blue) 55%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.sub{color:var(--muted);font-size:clamp(17px,2.5vw,20px);max-width:640px;margin:0 auto 24px;text-wrap:balance}
+  .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:28px;color:var(--muted);font-size:14px}
+  .chips span{background:rgba(255,255,255,.05);border:1px solid var(--line);padding:8px 15px;border-radius:999px}
+
+  /* Animated hero board */
+  .stage{margin:34px auto 0;max-width:360px}
+  .stage svg{width:100%;height:auto;display:block;overflow:visible}
+  .edge{stroke:rgba(58,209,198,.35);stroke-width:3}
+  .trace{fill:none;stroke:url(#tg);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;
+         filter:drop-shadow(0 0 8px rgba(58,209,198,.6));stroke-dasharray:900;stroke-dashoffset:900;
+         animation:draw 4s ease-in-out infinite}
+  @keyframes draw{0%{stroke-dashoffset:900}40%{stroke-dashoffset:0}70%{stroke-dashoffset:0;opacity:1}
+                  84%{opacity:0}85%{stroke-dashoffset:900;opacity:0}100%{stroke-dashoffset:900;opacity:1}}
+  .node{fill:#fff}
+  .nlet{fill:#0a0e1a;font-weight:800}
+  .slot{fill:rgba(58,209,198,.9)}
+  .slotlet{fill:#05101e;font-weight:900}
+  .box{opacity:0;animation:pop .5s ease forwards}
+  @keyframes pop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+  section{padding:46px 0}
+  h2{font-size:clamp(26px,4.5vw,40px);font-weight:850;letter-spacing:-.01em;text-align:center;margin-bottom:8px;text-wrap:balance}
+  .lead{color:var(--muted);text-align:center;max-width:620px;margin:0 auto 34px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+  .feat{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
+        border-radius:18px;padding:22px}
+  .feat .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:24px;
+        background:rgba(58,209,198,.12);border:1px solid var(--line);margin-bottom:13px}
+  .feat h3{font-size:18px;margin-bottom:6px}
+  .feat p{color:var(--muted);font-size:15px}
+  .cta-band{background:linear-gradient(135deg,rgba(58,209,198,.14),rgba(154,124,255,.12));
+        border:1px solid var(--line);border-radius:24px;padding:40px 24px;text-align:center}
+  footer{border-top:1px solid var(--line);padding:30px 0 50px;color:#6b789b;font-size:14px;text-align:center}
+  footer a{color:var(--teal)}
+  footer .links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+  @media (prefers-reduced-motion:reduce){.trace{animation:none;stroke-dashoffset:0}.box{animation:none;opacity:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="brand" href="/monoline/"><span class="mark">▚</span> Monoline</a>
+    <a class="btn btn-primary" href="https://apps.apple.com/us/app/monoline-one-line-puzzle/id6814112233">Download</a>
+  </nav>
+
+  <div id="challenge"><div class="card">
+    <div class="eyebrow">You've been challenged 🔤</div>
+    <h3 id="ch-head" style="font-size:24px;margin:8px 0">A friend found words here — can you?</h3>
+    <div class="tiles" id="ch-tiles"></div>
+    <p style="color:var(--muted);margin-top:6px">Trace every word hidden in these letters.</p>
+    <div style="margin-top:16px"><a class="btn btn-primary" href="https://apps.apple.com/us/app/monoline-one-line-puzzle/id6814112233">Take the challenge — free</a></div>
+  </div></div>
+
+  <header class="hero">
+    <div class="eyebrow">Word Worlds · a mode in Monoline</div>
+    <h1>Learn words,<br><span class="t">one line at a time.</span></h1>
+    <p class="sub">A cluster of glowing letters hides several real words. Trace each one, learn what it means, hear it spoken — and light up a sky of lost words.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://apps.apple.com/us/app/monoline-one-line-puzzle/id6814112233">Play free on the App Store</a>
+      <a class="btn btn-ghost" href="#how">See how it works</a>
+    </div>
+    <div class="chips"><span>270 word levels</span><span>Find every word</span><span>Spoken aloud</span><span>Offline</span></div>
+
+    <div class="stage" aria-hidden="true">
+      <svg viewBox="0 0 360 300">
+        <defs><linearGradient id="tg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#3ad1c6"/><stop offset="1" stop-color="#5b8cff"/></linearGradient></defs>
+        <!-- answer slots filling in -->
+        <g font-family="inherit" text-anchor="middle">
+          <g class="box" style="animation-delay:2.4s">
+            <rect class="slot" x="96"  y="8" width="34" height="38" rx="9"/><text class="slotlet" x="113" y="35" font-size="22">S</text>
+            <rect class="slot" x="134" y="8" width="34" height="38" rx="9"/><text class="slotlet" x="151" y="35" font-size="22">T</text>
+            <rect class="slot" x="172" y="8" width="34" height="38" rx="9"/><text class="slotlet" x="189" y="35" font-size="22">E</text>
+            <rect class="slot" x="210" y="8" width="34" height="38" rx="9"/><text class="slotlet" x="227" y="35" font-size="22">A</text>
+            <rect class="slot" x="248" y="8" width="34" height="38" rx="9"/><text class="slotlet" x="265" y="35" font-size="22">M</text>
+          </g>
+        </g>
+        <!-- board edges (K5) -->
+        <g class="edge">
+          <line x1="180" y1="110" x2="110" y2="165"/><line x1="180" y1="110" x2="250" y2="165"/>
+          <line x1="180" y1="110" x2="140" y2="245"/><line x1="180" y1="110" x2="220" y2="245"/>
+          <line x1="110" y1="165" x2="250" y2="165"/><line x1="110" y1="165" x2="140" y2="245"/>
+          <line x1="110" y1="165" x2="220" y2="245"/><line x1="250" y1="165" x2="140" y2="245"/>
+          <line x1="250" y1="165" x2="220" y2="245"/><line x1="140" y1="245" x2="220" y2="245"/>
+        </g>
+        <path class="trace" d="M180 110 L250 165 L180 110 L140 245 L110 165 L220 245"/>
+        <g text-anchor="middle">
+          <circle class="node" cx="180" cy="110" r="22"/><text class="nlet" x="180" y="118" font-size="22">S</text>
+          <circle class="node" cx="110" cy="165" r="22"/><text class="nlet" x="110" y="173" font-size="22">E</text>
+          <circle class="node" cx="250" cy="165" r="22"/><text class="nlet" x="250" y="173" font-size="22">M</text>
+          <circle class="node" cx="140" cy="245" r="22"/><text class="nlet" x="140" y="253" font-size="22">A</text>
+          <circle class="node" cx="220" cy="245" r="22"/><text class="nlet" x="220" y="253" font-size="22">T</text>
+        </g>
+      </svg>
+    </div>
+  </header>
+</div>
+
+<section id="how"><div class="wrap">
+  <h2>Not just spelling — <span style="color:var(--teal)">understanding</span>.</h2>
+  <p class="lead">Every word you trace is a real, common English word. Monoline teaches it the way it sticks.</p>
+  <div class="grid">
+    <div class="feat"><div class="ic">🔤</div><h3>Find them all</h3><p>Each cluster of letters hides up to four real words. Trace every one to clear the level.</p></div>
+    <div class="feat"><div class="ic">📖</div><h3>Learn the meaning</h3><p>A kid-friendly definition, an example sentence, and a picture for every word you discover.</p></div>
+    <div class="feat"><div class="ic">🔊</div><h3>Hear it spoken</h3><p>Each word is read aloud, so you learn how it sounds — not just how it's spelled.</p></div>
+    <div class="feat"><div class="ic">🧠</div><h3>Remember it</h3><p>Spaced-repetition review brings words back at just the right time, so they stick for good.</p></div>
+    <div class="feat"><div class="ic">🏮</div><h3>A little story</h3><p>Luma the lantern and Pip guide you through a 14-chapter tale of relighting a sky of lost words.</p></div>
+    <div class="feat"><div class="ic">✌️</div><h3>Two games in one</h3><p>Switch any time between the classic one-stroke puzzle and Word Worlds — same beautiful app.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap"><div class="cta-band">
+  <div class="eyebrow">270 words waiting</div>
+  <h2 style="margin:10px 0 6px">Light up the sky.</h2>
+  <p class="lead" style="margin-bottom:22px">Free to play. No account. Works offline.</p>
+  <a class="btn btn-primary" href="https://apps.apple.com/us/app/monoline-one-line-puzzle/id6814112233">Download Monoline</a>
+</div></div></section>
+
+<footer><div class="wrap">
+  <div class="links">
+    <a href="/monoline/">Monoline</a>
+    <a href="https://apps.apple.com/us/app/monoline-one-line-puzzle/id6814112233">App Store</a>
+    <a href="/monoline/privacy/">Privacy</a>
+    <a href="/monoline/support/">Support</a>
+  </div>
+  © 2026 D23 AI · Learn a word, light a star.
+</div></footer>
+
+<script>
+  // Dynamic challenge: ?letters=STEAM&count=4  (shown when a friend shares a board)
+  (function(){
+    var p=new URLSearchParams(location.search);
+    var letters=(p.get("letters")||"").replace(/[^A-Za-z]/g,"").toUpperCase();
+    var count=parseInt(p.get("count")||"0",10);
+    if(!letters) return;
+    var box=document.getElementById("challenge");
+    var head=document.getElementById("ch-head");
+    var tiles=document.getElementById("ch-tiles");
+    head.textContent = count>1 ? ("A friend found "+count+" words in these letters — can you?") : "A friend sent you a word to find.";
+    letters.split("").forEach(function(c){var d=document.createElement("div");d.className="tile";d.textContent=c;tiles.appendChild(d);});
+    box.style.display="block";
+    document.title = "Can you find "+(count>1?("all "+count+" words"):"the word")+"? · Word Worlds";
+  })();
+</script>
+</body>
+</html>
