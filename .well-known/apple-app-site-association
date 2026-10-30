@@ -4,7 +4,7 @@
     "details": [
       {
         "appID": "9YG7G7YB2J.com.mobirizer.monoline",
-        "paths": [ "/monoline/challenge", "/monoline/challenge/*", "/monoline/challenge*" ]
+        "paths": [ "/monoline/challenge", "/monoline/challenge/*", "/monoline/challenge*", "/monoline/words", "/monoline/words/*", "/monoline/words*" ]
       }
     ]
   }
