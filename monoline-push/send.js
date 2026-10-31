@@ -16,6 +16,7 @@
 const admin = require("firebase-admin");
 const MESSAGES = require("./messages");
 const HALLOWEEN = require("./halloween");
+const DIWALI = require("./diwali");
 
 const sa = JSON.parse(process.env.FIREBASE_SA || "{}");
 if (!sa.project_id) {
@@ -61,6 +62,13 @@ function isHalloween(d) {
   return d.getUTCMonth() === 9 && d.getUTCDate() >= 24 && d.getUTCDate() <= 31;
 }
 
+// Diwali window (UTC, inclusive) — matches the in-app seasonal window (Nov 1-14).
+// November is month 10 (0-based). The 03:30 UTC early run lands at 9:00 IST,
+// prime time for the audience that celebrates.
+function isDiwali(d) {
+  return d.getUTCMonth() === 10 && d.getUTCDate() >= 1 && d.getUTCDate() <= 14;
+}
+
 async function sendTo(lang, m) {
   try {
     const id = await admin.messaging().send({
@@ -80,10 +88,14 @@ async function main() {
   // the wall-clock hour — GitHub's scheduler can run crons very late, which would
   // otherwise make both daily runs pick the same slot. 0 = early, 1 = main.
   const slot = process.env.PUSH_SLOT === "0" ? 0 : 1;
-  const halloween = isHalloween(now);
+  // At most one festival window is active at a time; its pool replaces the
+  // daily one and unlocks the second (early) slot for 2 messages/day.
+  const festival = isHalloween(now) ? { pool: HALLOWEEN, tag: "HALLOWEEN" }
+                 : isDiwali(now)    ? { pool: DIWALI,    tag: "DIWALI" }
+                 : null;
 
   // Off-season: the early slot stays silent so users still get exactly one a day.
-  if (!halloween && slot === 0) {
+  if (!festival && slot === 0) {
     console.log("Off-season early slot — skipping to keep 1 message/day.");
     return;
   }
@@ -97,17 +109,17 @@ async function main() {
     return;
   }
 
-  const pool = halloween ? HALLOWEEN : MESSAGES;
+  const pool = festival ? festival.pool : MESSAGES;
   const di = dayIndex(now);
-  // During Halloween the two daily runs pick two different messages.
-  const pick = halloween ? di * 2 + slot : di;
+  // During a festival the two daily runs pick two different messages.
+  const pick = festival ? di * 2 + slot : di;
 
   const results = [];
   for (const lang of LANGS) {
     const arr = pool[lang] || pool.en;
     results.push(await sendTo(lang, arr[pick % arr.length]));
   }
-  const tag = halloween ? `HALLOWEEN slot ${slot}` : "daily";
+  const tag = festival ? `${festival.tag} slot ${slot}` : "daily";
   console.log(`[${tag}] push results:`, JSON.stringify(results, null, 2));
   if (results.every((r) => r.error)) process.exit(1); // fail the job if all failed
 }
