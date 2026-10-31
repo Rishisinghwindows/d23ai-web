@@ -4,8 +4,8 @@ name: Monoline daily push
 # no Blaze — FCM sending is free on the Spark plan).
 on:
   schedule:
-    - cron: "30 11 * * *"   # main run: 11:30 UTC = 17:00 IST — one message EVERY day
-    - cron: "30 3 * * *"    # early run: 03:30 UTC = 09:00 IST — only sends during
+    - cron: "47 11 * * *"   # main run: 11:47 UTC ~= 17:17 IST — one message EVERY day
+    - cron: "47 3 * * *"    # early run: 03:47 UTC ~= 09:17 IST — only sends during
                             #   the Halloween window (Oct 24-31); silent otherwise,
                             #   giving 2 spooky messages/day in-season, 1/day normally
   workflow_dispatch: {}      # also lets you send on-demand from the Actions tab
@@ -42,5 +42,5 @@ jobs:
           # Which schedule triggered this run decides the message slot — robust to
           # GitHub's cron delays. "30 3 * * *" = early (slot 0), else main (slot 1).
           # A manual dispatch has no schedule → treated as the main run.
-          PUSH_SLOT: ${{ github.event.schedule == '30 3 * * *' && '0' || '1' }}
+          PUSH_SLOT: ${{ github.event.schedule == '47 3 * * *' && '0' || '1' }}
         run: node send.js
