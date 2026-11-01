@@ -17,6 +17,7 @@ const admin = require("firebase-admin");
 const MESSAGES = require("./messages");
 const HALLOWEEN = require("./halloween");
 const DIWALI = require("./diwali");
+const LAUNCH = require("./launch");   // one-time Word Worlds announcement
 
 const sa = JSON.parse(process.env.FIREBASE_SA || "{}");
 if (!sa.project_id) {
@@ -69,13 +70,15 @@ function isDiwali(d) {
   return d.getUTCMonth() === 10 && d.getUTCDate() >= 1 && d.getUTCDate() <= 14;
 }
 
-async function sendTo(lang, m) {
+async function sendTo(lang, m, data) {
   try {
-    const id = await admin.messaging().send({
+    const msg = {
       topic: `lang_${lang}`,
       notification: { title: m.title, body: m.body },
       apns: { payload: { aps: { sound: "default" } } },
-    });
+    };
+    if (data) msg.data = data;   // deep-link keys (route/level) → delivered in userInfo on tap
+    const id = await admin.messaging().send(msg);
     return { lang, ok: id };
   } catch (e) {
     return { lang, error: String(e) };
@@ -103,6 +106,24 @@ async function main() {
   // Once-per-(day,slot) guard: if this slot already went out today, stop here so
   // a GitHub re-run or a duplicate schedule firing can't buzz everyone twice.
   const dateKey = now.toISOString().slice(0, 10); // YYYY-MM-DD (UTC)
+
+  // One-time Word Worlds launch announcement: fires on WW_LAUNCH_DATE's MAIN run,
+  // deep-linked (route=word) so a tap opens the first word board. It replaces that
+  // day's daily message. Set WW_LAUNCH_DATE="YYYY-MM-DD" (UTC) to arm it.
+  const LAUNCH_DATE = (process.env.WW_LAUNCH_DATE || "").trim();
+  if (slot === 1 && LAUNCH_DATE && dateKey === LAUNCH_DATE) {
+    const lc = await claimSend(dateKey, "launch");
+    if (lc === "dup") { console.log("Launch push already sent today — skipping."); return; }
+    const lres = [];
+    for (const lang of LANGS) {
+      const m = LAUNCH[lang] || LAUNCH.en;
+      lres.push(await sendTo(lang, m, { route: "word", level: "1", src: "launch" }));
+    }
+    console.log("[WORD WORLDS LAUNCH] results:", JSON.stringify(lres, null, 2));
+    if (lres.every((r) => r.error)) process.exit(1);
+    return; // the launch replaces today's daily push
+  }
+
   const claim = await claimSend(dateKey, slot);
   if (claim === "dup") {
     console.log(`Slot ${slot} for ${dateKey} already sent — skipping to avoid a duplicate.`);

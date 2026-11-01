@@ -43,4 +43,7 @@ jobs:
           # GitHub's cron delays. "30 3 * * *" = early (slot 0), else main (slot 1).
           # A manual dispatch has no schedule → treated as the main run.
           PUSH_SLOT: ${{ github.event.schedule == '47 3 * * *' && '0' || '1' }}
+          # One-time Word Worlds launch push: set to the GO-LIVE date (YYYY-MM-DD, UTC)
+          # to announce the feature + deep-link users straight into it. Empty = disabled.
+          WW_LAUNCH_DATE: ""
         run: node send.js
