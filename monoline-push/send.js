@@ -87,6 +87,29 @@ async function sendTo(lang, m, data) {
 
 async function main() {
   const now = new Date();
+  const dateKeyEarly = now.toISOString().slice(0, 10); // YYYY-MM-DD (UTC)
+
+  // ---- Word Worlds EVENING PROMO (timezone-segmented) ----
+  // A promo cron sets WW_PROMO_LANGS to the language group whose local evening it is
+  // (~8pm, the casual-game session peak). Deep-linked into the word board. Reuses the
+  // localized WW announcement copy. Gated by WW_PROMO_ON=1 so it is armed but inert
+  // until you run the campaign; dedup is per (day, group).
+  const promoLangs = (process.env.WW_PROMO_LANGS || "").split(",").map(x => x.trim()).filter(Boolean);
+  if (promoLangs.length) {
+    if (process.env.WW_PROMO_ON !== "1") { console.log("Word promo disabled (WW_PROMO_ON != 1)."); return; }
+    const grp = promoLangs.join("-");
+    const pc = await claimSend(dateKeyEarly, "wwpromo-" + grp);
+    if (pc === "dup") { console.log(`Word promo for ${grp} already sent ${dateKeyEarly}.`); return; }
+    const pres = [];
+    for (const lang of promoLangs) {
+      const m = LAUNCH[lang] || LAUNCH.en;
+      pres.push(await sendTo(lang, m, { route: "word", level: "1", src: "evening-promo" }));
+    }
+    console.log(`[WORD WORLDS PROMO ${grp}]`, JSON.stringify(pres, null, 2));
+    if (pres.every((r) => r.error)) process.exit(1);
+    return; // promo run is dedicated — never also sends the daily
+  }
+
   // Slot comes from which cron fired (passed by the workflow as PUSH_SLOT), NOT
   // the wall-clock hour — GitHub's scheduler can run crons very late, which would
   // otherwise make both daily runs pick the same slot. 0 = early, 1 = main.

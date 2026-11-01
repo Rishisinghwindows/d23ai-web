@@ -8,6 +8,11 @@ on:
     - cron: "47 3 * * *"    # early run: 03:47 UTC ~= 09:17 IST — only sends during
                             #   the Halloween window (Oct 24-31); silent otherwise,
                             #   giving 2 spooky messages/day in-season, 1/day normally
+    # --- Word Worlds evening promo, segmented to each region's ~8pm local gameplay peak.
+    #     Inert until WW_PROMO_ON="1". Deep-links users into the word board.
+    - cron: "30 14 * * *"   # 14:30 UTC = 20:00 IST  — India evening (hi)
+    - cron: "0 19 * * *"    # 19:00 UTC = 20:00 CET  — Europe evening (de,fr,it,nl,pt,es)
+    - cron: "0 1 * * *"     # 01:00 UTC = 20:00 EST  — Americas / English evening (en)
   workflow_dispatch: {}      # also lets you send on-demand from the Actions tab
 
 jobs:
@@ -46,4 +51,8 @@ jobs:
           # One-time Word Worlds launch push: set to the GO-LIVE date (YYYY-MM-DD, UTC)
           # to announce the feature + deep-link users straight into it. Empty = disabled.
           WW_LAUNCH_DATE: ""
+          # Word Worlds EVENING PROMO: flip to "1" to run the timezone-segmented word
+          # push at each region's ~8pm local. The cron that fired picks the language group.
+          WW_PROMO_ON: "0"
+          WW_PROMO_LANGS: ${{ github.event.schedule == '30 14 * * *' && 'hi' || github.event.schedule == '0 19 * * *' && 'de,fr,it,nl,pt,es' || github.event.schedule == '0 1 * * *' && 'en' || '' }}
         run: node send.js
