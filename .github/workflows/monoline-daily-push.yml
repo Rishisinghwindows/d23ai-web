@@ -53,6 +53,6 @@ jobs:
           WW_LAUNCH_DATE: ""
           # Word Worlds EVENING PROMO: flip to "1" to run the timezone-segmented word
           # push at each region's ~8pm local. The cron that fired picks the language group.
-          WW_PROMO_ON: "0"
+          WW_PROMO_ON: "1"
           WW_PROMO_LANGS: ${{ github.event.schedule == '30 14 * * *' && 'hi' || github.event.schedule == '0 19 * * *' && 'de,fr,it,nl,pt,es' || github.event.schedule == '0 1 * * *' && 'en' || '' }}
         run: node send.js
